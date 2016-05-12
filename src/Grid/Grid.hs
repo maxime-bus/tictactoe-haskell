@@ -1,7 +1,8 @@
-module Grid where
+module Grid.Grid where
+
+import Data.List
 
 import Utils
-import Data.List
 
 type SideSize = Int 
 type Row = Int
@@ -10,20 +11,6 @@ type Column = Int
 data Shape = Cross | Circle deriving (Show)
 data Grid = Grid [Maybe Shape] SideSize deriving (Show)
 data Position = Position Row Column deriving (Show)
-
-renderPiece :: Maybe Shape -> String
-renderPiece (Just Circle) = "0"
-renderPiece (Just Cross) = "X"
-renderPiece Nothing = " "
-
-renderPieces :: [Maybe Shape] -> [String]
-renderPieces = map renderPiece
-
-renderGrid :: Grid -> [String]
-renderGrid (Grid pieces sideSize) = mapEvery sideSize (++"|\n") $ map ("|" ++) $ renderPieces pieces
-
-renderGrid' :: Grid -> String
-renderGrid' grid = intercalate "" $ renderGrid grid
 
 initGrid :: Int -> Grid
 initGrid n = Grid (map (\ _ -> Nothing) [1..n^2]) n

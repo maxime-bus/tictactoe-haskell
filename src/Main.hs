@@ -1,6 +1,10 @@
-import Utils
-import Grid
+module Main where
+
 import Text.Read
+
+import Utils
+import Grid.Grid
+import Grid.Render
 
 data Player = PlayerX | PlayerO deriving (Eq, Show)
 
