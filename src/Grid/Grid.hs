@@ -8,18 +8,18 @@ type SideSize = Int
 type Row = Int
 type Column = Int
 
-data Shape = Cross | Circle deriving (Show)
-data Grid = Grid [Maybe Shape] SideSize deriving (Show)
+data Case = EmptyCase | Cross | Circle deriving (Show)
+data Grid = Grid [Case] SideSize deriving (Show)
 data Position = Position Row Column deriving (Show)
 
 initGrid :: Int -> Grid
-initGrid n = Grid (map (\ _ -> Nothing) [1..n^2]) n
+initGrid n = Grid (map (\ _ -> EmptyCase) [1..n^2]) n
 
-updateGrid :: Grid -> Position -> Maybe Shape -> Grid
-updateGrid (Grid pieces size) position piece = Grid newPieces size
+updateGrid :: Grid -> Position -> Case -> Grid
+updateGrid (Grid cases size) position c = Grid newCases size
     where
         index = computeIndex position size
-        newPieces = init' (take index pieces) ++ [piece] ++ (drop index pieces)
+        newCases = init' (take index cases) ++ [c] ++ (drop index cases)
 
 --  corner  |         |  corner
 --   top    |   top   |   top

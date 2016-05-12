@@ -41,10 +41,10 @@ checkWinner (Grid pieces size)
     | size == 3 = checkWinner' pieces
     | otherwise = checkWinner'' pieces
 
-checkWinner' :: [Maybe Shape] -> Maybe Player
+checkWinner' :: [Case] -> Maybe Player
 checkWinner' _ = Just PlayerX
 
-checkWinner'' :: [Maybe Shape] -> Maybe Player
+checkWinner'' :: [Case] -> Maybe Player
 checkWinner'' _ = Just PlayerO
 
 gameLoop :: Grid -> Bool -> Player -> IO ()
@@ -54,8 +54,8 @@ gameLoop currentGrid _ playerTurn = do
     position <- askPlayerHisPosition playerTurn
     case playerTurn of
         PlayerX -> do
-            let gridUpdated = updateGrid currentGrid position (Just Cross)
+            let gridUpdated = updateGrid currentGrid position Cross
             gameLoop gridUpdated False PlayerO
 	_       -> do
-            let gridUpdated = updateGrid currentGrid position (Just Circle)
+            let gridUpdated = updateGrid currentGrid position Circle
             gameLoop gridUpdated False PlayerX

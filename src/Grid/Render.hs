@@ -5,16 +5,16 @@ import Data.List
 import Grid.Grid
 import Utils
 
-renderPiece :: Maybe Shape -> String
-renderPiece (Just Circle) = "0"
-renderPiece (Just Cross) = "X"
-renderPiece Nothing = " "
+renderCase :: Case -> String
+renderCase Circle = "O"
+renderCase Cross = "X"
+renderCase EmptyCase = " "
 
-renderPieces :: [Maybe Shape] -> [String]
-renderPieces = map renderPiece
+renderCases :: [Case] -> [String]
+renderCases = map renderCase
 
 renderGrid :: Grid -> [String]
-renderGrid (Grid pieces sideSize) = mapEvery sideSize (++"|\n") $ map ("|" ++) $ renderPieces pieces
+renderGrid (Grid cases sideSize) = mapEvery sideSize (++"|\n") $ map ("|" ++) $ renderCases cases
 
 renderGrid' :: Grid -> String
 renderGrid' grid = intercalate "" $ renderGrid grid
