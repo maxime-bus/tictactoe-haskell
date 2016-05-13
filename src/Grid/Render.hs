@@ -14,7 +14,7 @@ renderCases :: [Case] -> [String]
 renderCases = map renderCase
 
 renderGrid :: Grid -> [String]
-renderGrid (Grid cases sideSize) = mapEvery sideSize (++"|\n") $ map ("|" ++) $ renderCases cases
+renderGrid (Grid cases size) = mapEvery size (++"|\n") $ map ("|" ++) $ renderCases cases
 
 renderGrid' :: Grid -> String
 renderGrid' grid = intercalate "" $ renderGrid grid

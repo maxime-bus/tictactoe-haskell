@@ -4,12 +4,12 @@ import Data.List
 
 import Utils
 
-type SideSize = Int 
+type Size = Int 
 type Row = Int
 type Column = Int
 
 data Case = EmptyCase | Cross | Circle deriving (Show)
-data Grid = Grid [Case] SideSize deriving (Show)
+data Grid = Grid [Case] Size deriving (Show)
 data Position = Position Row Column deriving (Show)
 
 initGrid :: Int -> Grid
@@ -38,7 +38,7 @@ updateGrid (Grid cases size) position c = Grid newCases size
 --   left   |         |  right
 
 -- TODO : find a way to improve this code, if possible.
-computeIndex :: Position -> SideSize -> Int
+computeIndex :: Position -> Size -> Int
 computeIndex (Position row column) size
     | row <= 0 && column <= 0       = 1                             -- corner top left
     | row <= 0 && column <= size    = computeIndex' 1 column        -- top
