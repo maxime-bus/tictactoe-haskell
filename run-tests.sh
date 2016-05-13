@@ -1,3 +1,3 @@
 #!/usr/bin/bash
 
-runhaskell -isrc test/*.hs
+runhaskell -isrc:test test/TestRunner.hs

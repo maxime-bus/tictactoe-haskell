@@ -1,4 +1,4 @@
-module RenderTest where
+module RenderTest (renderTests) where
 
 import Test.HUnit
 
@@ -6,10 +6,8 @@ import Grid.Grid
 import Grid.Render
 
 test1 = TestCase $ do
-    assertEqual "" ("X") (renderCase Cross)
-    assertEqual "" ("O") (renderCase Circle)
-    assertEqual "" (" ") (renderCase EmptyCase)
+    assertEqual "Cross symbol should be 'X'" ("X") (renderCase Cross)
+    assertEqual "Circle symbol should be 'O'" ("O") (renderCase Circle)
+    assertEqual "Empty symbol should be ' '" (" ") (renderCase EmptyCase)
 
-tests = TestList [test1]
-
-main = runTestTT tests
+renderTests = TestList [test1]
