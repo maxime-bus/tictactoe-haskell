@@ -1,1 +1,1 @@
-./src/Main
+./build/Main
