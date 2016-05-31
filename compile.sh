@@ -1,1 +1,1 @@
-ghc -isrc --make -Wall src/Main.hs
+ghc -isrc --make -Wall -outputdir build/ -o build/Main src/Main.hs
