@@ -8,10 +8,12 @@ import Grid.Render
 
 data Player = PlayerX | PlayerO deriving (Eq, Show)
 
+data GameState = GameOver | GameNotOver
+
 main :: IO ()
-main = do
+main = do 
     grid <- fmap initGrid askGridSizeUntilSizeIsCorrect
-    gameLoop grid False PlayerX
+    gameLoop grid GameNotOver PlayerX
 
 askGridSizeUntilSizeIsCorrect :: IO (Int)
 askGridSizeUntilSizeIsCorrect = do
@@ -47,15 +49,15 @@ checkWinner' _ = Just PlayerX
 checkWinner'' :: [Case] -> Maybe Player
 checkWinner'' _ = Just PlayerO
 
-gameLoop :: Grid -> Bool -> Player -> IO ()
-gameLoop _ True _ = return ()
+gameLoop :: Grid -> GameState -> Player -> IO ()
+gameLoop _ GameOver _ = return ()
 gameLoop currentGrid _ playerTurn = do
     putStrLn $ renderGrid' currentGrid
     position <- askPlayerHisPosition playerTurn
     case playerTurn of
         PlayerX -> do
             let gridUpdated = updateGrid currentGrid position Cross
-            gameLoop gridUpdated False PlayerO
+            gameLoop gridUpdated GameNotOver PlayerO
 	_       -> do
             let gridUpdated = updateGrid currentGrid position Circle
-            gameLoop gridUpdated False PlayerX
+            gameLoop gridUpdated GameNotOver PlayerX
