@@ -48,12 +48,15 @@ checkWinner'' _ = Just PlayerO
 gameLoop :: Grid -> GameState -> Player -> IO ()
 gameLoop _ GameOver _ = return ()
 gameLoop currentGrid _ playerTurn = do
-    putStrLn $ renderGrid' currentGrid
+    let currentSymbol = if playerTurn == PlayerX then Cross else Circle
+    let nextPlayer = if playerTurn == PlayerX then PlayerO else PlayerX
+
+    putStrLn ""
+    putStrLn $ renderGrid currentGrid
     position <- askPlayerHisPosition playerTurn
-    case playerTurn of
-        PlayerX -> do
-            let gridUpdated = updateGrid currentGrid position Cross
-            gameLoop gridUpdated GameNotOver PlayerO
-	_       -> do
-            let gridUpdated = updateGrid currentGrid position Circle
-            gameLoop gridUpdated GameNotOver PlayerX
+
+    let gridUpdated = updateGrid currentGrid position currentSymbol
+
+    -- Check here who's the winner
+
+    gameLoop gridUpdated GameNotOver nextPlayer
