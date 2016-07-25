@@ -2,7 +2,6 @@ module Main where
 
 import Text.Read
 
-import Utils
 import Grid.Grid
 import Grid.Render
 
@@ -32,10 +31,7 @@ askPlayerHisPosition player = do
 
 parsePosition :: String -> Maybe Position
 parsePosition position = case words position of
-    [a, b]    -> do
-        row <- readMaybe a
-        col <- readMaybe b
-        return (Position row col)
+    [a, b]    -> Position <$> readMaybe a <*> readMaybe b
     _         -> Nothing
 
 checkWinner :: Grid -> Maybe Player
