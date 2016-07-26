@@ -22,12 +22,15 @@ askGridSizeUntilSizeIsCorrect = do
         _       -> putStrLn "You just typed a wrong size." >> askGridSizeUntilSizeIsCorrect
 
 
-askPlayerHisPosition :: Player -> IO (Position)
-askPlayerHisPosition player = do
+askPlayerHisPosition :: Player -> Grid -> IO (Position)
+askPlayerHisPosition player grid = do
     pos <- putStrLn (show player ++ ", choose your position (row column) :") >> getLine
     case parsePosition pos of
-        Just pos'   -> return pos'
-        _           -> putStrLn "You just typed a wrong position." >> askPlayerHisPosition player
+        Just pos'   -> do
+            case getCaseState pos' grid of
+                EmptyCase -> return pos'
+                _         -> putStrLn "The case is already filled" >> askPlayerHisPosition player grid
+        _           -> putStrLn "You just typed a wrong position." >> askPlayerHisPosition player grid
 
 parsePosition :: String -> Maybe Position
 parsePosition position = case words position of
@@ -53,7 +56,7 @@ gameLoop currentGrid _ playerTurn = do
 
     putStrLn ""
     putStrLn $ renderGrid currentGrid
-    position <- askPlayerHisPosition playerTurn
+    position <- askPlayerHisPosition playerTurn currentGrid
 
     let gridUpdated = updateGrid currentGrid position currentSymbol
 

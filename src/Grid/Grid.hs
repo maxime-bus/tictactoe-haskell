@@ -21,6 +21,9 @@ updateGrid (Grid cases size) position c = Grid newCases size
         index = computeIndex position size
         newCases = init' (take index cases) ++ [c] ++ (drop index cases)
 
+getCaseState :: Position -> Grid -> Case
+getCaseState pos (Grid cases size) = cases !! ((computeIndex pos size) - 1)
+
 --  corner  |         |  corner
 --   top    |   top   |   top
 --   left   |         |  right
