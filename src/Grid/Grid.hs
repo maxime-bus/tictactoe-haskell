@@ -1,32 +1,24 @@
 module Grid.Grid where
 
 import Data.List
-
-import Utils
+import qualified Data.Map as Map
 
 type Size = Int 
 type Row = Int
 type Column = Int
+type Position = (Row, Column)
 
 data Case = EmptyCase | Cross | Circle deriving (Show)
-data Grid = Grid [Case] Size deriving (Show)
-data Position = Position Row Column deriving (Show)
+data Grid = Grid (Map.Map Position Case) Size deriving (Show)
 
 initGrid :: Int -> Grid
-initGrid n = Grid (map (\ _ -> EmptyCase) [1..n^2]) n
+initGrid size = Grid emptyGrid size where
+    emptyGrid = Map.fromList [((x, y), EmptyCase) | x <- [1..size], y <- [1..size]]
 
-updateGrid :: Grid -> Int -> Case -> Grid
-updateGrid (Grid cases size) index c = Grid newCases size
-    where
-        newCases = init' (take index cases) ++ [c] ++ (drop index cases)
+updateGrid :: Grid -> Position -> Case -> Grid
+updateGrid (Grid cases size) pos newCase = Grid newValue size
+    where newValue = Map.adjust (\ _ -> newCase) pos cases
+    -- Why the fuck do I need a function to update a key oO ?
 
-getCaseState :: Int -> Grid -> Case
-getCaseState index (Grid cases size) = cases !! (index - 1)
-
-computeIndex :: Position -> Size -> Maybe Int
-computeIndex (Position row column) size 
-    | notInGrid row column = Nothing
-    | otherwise            = Just(size*(row - 1) + column)
-    where
-        notInGrid r c = null (filter (\ pos -> pos == (r,c)) allAvailablePositions)
-        allAvailablePositions = (,) <$> [1..size] <*> [1..size]
+getCaseState :: Position -> Grid -> Maybe Case
+getCaseState pos (Grid cases _) = Map.lookup pos cases

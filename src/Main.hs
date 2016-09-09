@@ -22,34 +22,21 @@ askGridSizeUntilSizeIsCorrect = do
         _       -> putStrLn "You just typed a wrong size." >> askGridSizeUntilSizeIsCorrect
 
 
-askPlayerHisPosition :: Player -> Grid -> IO (Int)
-askPlayerHisPosition player grid@(Grid cases size) = do
+askPlayerHisPosition :: Player -> Grid -> IO (Position)
+askPlayerHisPosition player grid = do
     pos <- putStrLn (show player ++ ", choose your position (row column) :") >> getLine
     case parsePosition pos of
         Nothing   -> putStrLn "You just typed a wrong position." >> askPlayerHisPosition player grid
         Just pos' -> do
-            case computeIndex pos' size of
-                Nothing    -> putStrLn "Position out of bound" >> askPlayerHisPosition player grid
-                Just index -> do
-                    case getCaseState index grid of
-                        EmptyCase -> return index
-                        _         -> putStrLn "The case is already filled" >> askPlayerHisPosition player grid
+            case getCaseState pos' grid of
+                Just EmptyCase -> return pos'
+                Just _         -> putStrLn "The case is already filled" >> askPlayerHisPosition player grid
+                Nothing        -> putStrLn "Position out of bound" >> askPlayerHisPosition player grid
 
 parsePosition :: String -> Maybe Position
 parsePosition position = case words position of
-    [a, b]    -> Position <$> readMaybe a <*> readMaybe b
+    [a, b]    -> (,) <$> readMaybe a <*> readMaybe b
     _         -> Nothing
-
-checkWinner :: Grid -> Maybe Player
-checkWinner (Grid pieces size) 
-    | size == 3 = checkWinner' pieces
-    | otherwise = checkWinner'' pieces
-
-checkWinner' :: [Case] -> Maybe Player
-checkWinner' _ = Just PlayerX
-
-checkWinner'' :: [Case] -> Maybe Player
-checkWinner'' _ = Just PlayerO
 
 gameLoop :: Grid -> GameState -> Player -> IO ()
 gameLoop _ GameOver _ = return ()
@@ -59,9 +46,9 @@ gameLoop currentGrid _ playerTurn = do
 
     putStrLn ""
     putStrLn $ renderGrid currentGrid
-    index <- askPlayerHisPosition playerTurn currentGrid
+    position <- askPlayerHisPosition playerTurn currentGrid
 
-    let gridUpdated = updateGrid currentGrid index currentSymbol
+    let gridUpdated = updateGrid currentGrid position currentSymbol
 
     -- Check here who's the winner
 

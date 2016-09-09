@@ -1,7 +1,7 @@
 module Grid.Render where
 
 import Data.List
-
+import qualified Data.Map as Map
 import Grid.Grid
 import Utils
 
@@ -15,8 +15,9 @@ renderCases [] = ""
 renderCases (x:xs) = renderCase x : renderCases xs
 
 renderGrid :: Grid -> String
-renderGrid (Grid cases size) = 
-    let numbers = map ((++) . (++ " ") . show) [1..size]
+renderGrid (Grid mapCases size) = 
+    let cases = Map.elems mapCases
+        numbers = map ((++) . (++ " ") . show) [1..size]
         renderedCases = renderCases cases
         renderedRows = map(++"|\n") $ map ("|"++) $ map (intersperse '|') $ chunk (size) renderedCases
         numberedRows = zipWith ($) numbers renderedRows
