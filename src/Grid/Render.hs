@@ -22,5 +22,5 @@ renderGrid (Grid mapCases size) =
         renderedRows = map(++"|\n") $ map ("|"++) $ map (intersperse '|') $ chunk (size) renderedCases
         numberedRows = zipWith ($) numbers renderedRows
         numberedColumns = "   " ++ foldr ($) "" numbers
-        renderedGrid = (intercalate [] numberedRows) ++ numberedColumns
+        renderedGrid = numberedColumns ++ "\n" ++ (intercalate [] numberedRows)
     in renderedGrid
